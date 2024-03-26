@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "ThuVien.h"
+#include "ThuVienTuCode.h"
+#define _WIN32_WINNT 0x0501
 using namespace std;
 
 
@@ -13,8 +15,10 @@ void set_color(int color) {
 
 int main()
 {   
+    loadingScreen();
+    introGame();
+    /*maxsc();
     srand(time(NULL));
-    char** box = nullptr;
     int index = 1;
     int jdex = 1;
     int col, row;
@@ -31,7 +35,7 @@ int main()
     x = whereX();
     y = whereY();
     y -= row;
-    movingBox(box, index, jdex, row, col, x, y);
+    movingBox(box, index, jdex, row, col, x, y);*/
     return 0;
 }
 
