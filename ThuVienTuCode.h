@@ -427,17 +427,6 @@ void introGame() {
                 }
                 else if (choose == 2) {
                     system("cls");
-                    SetColor(15);
-                    cout << "\n\n\nCreator: Pham Huy Thien Phuc\n";
-                    cout << "\nDate: 24/01/2022\n";
-                    SetColor(8);
-                    cout << " \n\n\t\t==========================  Story  ==========================\n\n";
-                    cout << "\t\t\t\tYou are a mother snake in the small garden.\n\t\t\t\tYour son is a strong snake who can puff fire.\n";
-                    cout << "\t\t\t\tThe main mission of this game is to make the villagers around you happy.\n\t\t\t\tNow, it have just completed round 1.\n\n";
-                    cout << "\t\t\t\t\t\t\t\t\tEnjoy the game,\n";
-                    cout << "\t\t\t\t\t\t\t\t\tPham Huy Thien Phuc.\n";
-                    Sleep(8500);
-                    system("cls");
                     break;
                 }
                 else if (choose == 3)
