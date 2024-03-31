@@ -1,71 +1,131 @@
-﻿#pragma once
+#pragma once
 #include "ThuVien.h"
 //Thư viện mà nhóm em tự code: 
+void inputRowCol(int& row, int& col);
+void runningGame(int &row, int &col);
 
-
-
-
-
-
-void runningGame();
+//=================== Hàm vẽ tiêu đề game ===================
+void drawingTitle() {
+    int x = 30;
+    int y = 0;
+    //============= The Begining Line ============
+    SetColor(6);
+    gotoXY(x, y++);
+    cout << "  _____ _   _ _____   __  __    _  _____ ____ _   _ ___ _   _  ____    ____    _    __  __ _____ ";
+    gotoXY(x, y++);
+    cout << " |_   _| | | | ____| |  \\/  |  / \\|_   _/ ___| | | |_ _| \\ | |/ ___|  / ___|  / \\  |  \\/  | ____|";
+    gotoXY(x, y++);
+    cout << "   | | | |_| |  _|   | |\\/| | / _ \\ | || |   | |_| || ||  \\| | |  _  | |  _  / _ \\ | |\\/| |  _|  ";
+    gotoXY(x, y++);
+    cout << "   | | |  _  | |___  | |  | |/ ___ \\| || |___|  _  || || |\\  | |_| | | |_| |/ ___ \\| |  | | |___ ";
+    gotoXY(x, y++);
+    cout << "   |_| |_| |_|_____| |_|  |_/_/   \\_\\_| \\____|_| |_|___|_| \\_|\\____|  \\____/_/   \\_\\_|  |_|_____|";
+    //============= Drawing Pokemon =============
+    gotoXY(x += 15, y++);
+    gotoXY(x, y++);
+    cout << "                                  ,',\n";
+    gotoXY(x, y++);
+    cout << "    _.----.        ____         ,'  _\\   ___    ___     ____\n";
+    gotoXY(x, y++);
+    cout << "_,-'       `.     |    |  /`.   \\,-'    |   \\  /   |   |    \\  |`.\n";
+    gotoXY(x, y++);
+    cout << "\\      __    \\    '-.  | /   `.  ___    |    \\/    |   '-.   \\ |  |\n";
+    gotoXY(x, y++);
+    cout << " \\.    \\ \\   |  __  |  |/    ,','_  `.  |          | __  |    \\|  |\n";
+    gotoXY(x, y++);
+    cout << "   \\    \\/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |\n";
+    gotoXY(x, y++);
+    cout << "    \\     ,-'/  /   \\    ,'   | \\/ / ,`.|         /  /   \\  |     |\n";
+    gotoXY(x, y++);
+    cout << "     \\    \\ |   \\_/  |   `-.  \\    `'  /|  |    ||   \\_/  | |\\    |\n";
+    gotoXY(x, y++);
+    cout << "      \\    \\ \\      /       `-.`.___,-' |  |\\  /| \\      /  | |   |\n";
+    gotoXY(x, y++);
+    cout << "       \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |\n";
+    gotoXY(x, y++);
+    cout << "        \\_.-'       |__|    `-._ |              '-.|     '-.| |   |\n";
+    gotoXY(x, y++);
+    cout << "                                `'                            '-._|\n";
+}
 
 //========Hàm tạo hộp =======
 void playingBox(char**& box, int col, int row) {
     int n = row;
     int m = col;
-    int colChar = (m - 1) / 4;
-    int rowChar = (n - 1) / 8;
+    int colChar = (m - 1) / 8;
+    int rowChar = (n - 1) / 4;
     int iChar = 0;
-    int jChar = 0;
     int randRow = 0;
     int randCol = 0;
-    char temp;
+    int size = colChar * rowChar;
+    char* temparray = new char[size];
     box = new char* [n];
-    for (int i = 0; i < m; i++) {
+    for (int i = 0; i < n; i++) {
         box[i] = new char[m];
     }
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            box[i][j] = ' ';
-        }
+
+    //============= Random Matrix ====================
+    for (int i = 0; i < size; i += 2) {
+        char ch = 'A' + rand() % 26;
+        temparray[i] = ch;
+        temparray[i + 1] = ch;
+    }
+    for (int i = size - 1; i > 0; --i) {
+        // Generate a random index between 0 and i (inclusive)
+        int j = rand() % (i + 1);
+
+        // Swap arr[i] with arr[j]
+        swap(temparray[i], temparray[j]);
     }
     /*Dòng code này dùng để tạo ra bảng và đồng thời gán chữ vào mỗi ô trong bảng */
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
             if ((i % 4 == 0) && (j % 8 != 0)) {
                 box[i][j] = '-';
-                continue;
             }
             else if ((j % 8 == 0) && (i % 4 != 0)) {
                 box[i][j] = '|';
-                continue;
             }
-            else if (i % 2 == 0 && j % 4 == 0 && i % 4 != 0 && j % 8 != 0) {
-                box[i][j] = alphabet[(iChar * colChar + jChar) % colChar];
-                jChar++;
+            else if ((i % 2 == 0) && (j % 4 == 0) && (i % 4 != 0) && (j % 8 != 0)) {
+                box[i][j] = temparray[iChar];
+                iChar++;
             }
+            else 
+                box[i][j] = ' ';
         }
-        iChar++;
-        jChar = 0;
     }
+    delete[] temparray;
+}
+//======= Hàm giải phóng hộp =================
+void freeBox(char** box, int row) {
+    for (int i = 0; i < row; i++) {
+        delete[] box[i];
+    }
+    delete[] box;
 }
 //=======Hàm xuất hộp ra màn hình ========
 void coutBox(char**& box, int col, int row) {
     int n = row;
     int m = col;
+    int x = 30;
+    int y = 5;
     for (int i = 0; i < n; i++) {
+        gotoXY(x, y);
         for (int j = 0; j < m; j++) {
             cout << box[i][j];
         }
-        cout << endl;
+        y++;
+        //cout << endl;
     }
+    y = 5;
 }
 //=========Hàm vẽ ra ô trắng===========
 void drawBox(char**& box, int index, int jdex) {
     for (int i = index; i < index + 3; i++) {
         for (int j = jdex; j < jdex + 7; j++) {
-            if (isalpha(box[i][j]))
+            if (isalpha(box[i][j])) {
                 continue;
+            }
             box[i][j] = char(219);
         }
     }
@@ -88,7 +148,66 @@ void xoadulieuCu(int row, int col, int x, int y) {
         }
         cout << endl;
     }
-}
+}/*
+//=========Hàm xóa ô trong hộp theo I Matching ======
+void deleteBoxIMatchinglineX(char**& box, int index, int jdex, int tempindex, int tempjdex, int col, int row) {
+    int minindex = min(index, tempindex);
+    int maxindex = max(index, tempindex);
+    int minjdex = min(jdex, tempjdex);
+    int maxjdex = max(jdex, tempjdex);
+//=========== Check Left Up Board ==================
+    if (minindex == 1 && minjdex == 1) {
+        for (int i = minindex - 1; i < maxindex + 4; i++) {
+            for (int j = minjdex - 1; j < maxjdex + 7; j++) {
+                box[i][j] = ' ';
+            }
+        }
+        return;
+    }
+//============ Check Right Up Board ==================
+    if (minindex == 1 && minjdex == col) {
+        for (int i = minindex - 1; i < maxindex + 4; i++) {
+            for (int j = minjdex; j < maxjdex + 8; j++) {
+                box[i][j] = ' ';
+            }
+        }
+        return;
+    }
+//============= Check Up Board ====================
+    if (minindex == 1 && minindex != 1 && minjdex != 1) {
+        for (int i = minindex - 1; i < maxindex + 4; i++) {
+            for (int j = minjdex; j < maxjdex + 7; j++) {
+                box[i][j] = ' ';
+            }
+        }
+        return;
+    }
+//============== Check Left Down Board =================
+    if (minindex == row && minjdex == 1) {
+        for (int i = minindex; i < maxindex + 5; i++) {
+            for (int j = minjdex - 1; j < maxjdex + 7; j++) {
+                box[i][j] = ' ';
+            }
+        }
+        return;
+    }
+//============= Check Right Down Board =================
+    if (minindex == row && minjdex == col) {
+        for (int i = minindex; i < maxindex + 5; i++) {
+            for (int j = minjdex; j < maxjdex + 8; j++) {
+                box[i][j] = ' ';
+            }
+        }
+        return;
+    }
+//================== Check Down Board ======================
+}*/
+/*void selectBox(char** box, int& index, int& jdex, int row, int col, int x, int y, int key) {
+    if (key == 13) {
+
+    }
+}*/
+
 //=========Hàm xóa ô trong hộp======
 void deleteBox(char**& box, int index, int jdex) {
     for (int i = index - 1; i < index + 4; i++) {
@@ -97,17 +216,204 @@ void deleteBox(char**& box, int index, int jdex) {
         }
     }
 }
-/*void selectBox(char** box, int& index, int& jdex, int row, int col, int x, int y, int key) {
-    if (key == 13) {
 
+//================ Hàm kiểm tra I Matching ===========================
+bool checklineX(char** box, int index, int jdex, int tempjdex) {
+    int jdexChar = jdex + 3;
+    int indexChar = index + 1;
+    int tempjdexChar = tempjdex + 3;
+    int minlinex = min(jdexChar, tempjdexChar);
+    int maxlinex = max(jdexChar, tempjdexChar);
+    if (minlinex == (maxlinex - 8)) {
+        return true;
     }
-}*/
+    for (int i = minlinex + 8; i <= maxlinex-8; i+=8) {
+        if (isalpha(box[indexChar][i])) {
+            return false;
+        }
+    }
+    return true;
+}
+bool checklineY(char** box, int index, int jdex, int tempindex) {
+    int jdexChar = jdex + 3;
+    int indexChar = index + 1;
+    int tempindexChar = tempindex + 1;
+    int minliney = min(indexChar, tempindexChar);
+    int maxliney = max(indexChar, tempindexChar);
+    if (minliney == (maxliney - 4)) {
+        return true;
+    }
+    for (int i = minliney; i <= maxliney-4; i+=4) {
+        if (isalpha(box[i][jdexChar])) {
+            return false;
+        }
+    }
+    return true;
+}
+//================= Hàm kiểm tra Z Matching ================
+int checkRectX(char** box, int index, int jdex, int tempindex, int tempjdex) {
+    int jdexChar = jdex;
+    int indexChar = index;
+    int tempindexChar = tempindex;
+    int tempjdexChar = tempjdex;
+    int minjdex = min(jdexChar, tempjdexChar);
+    int maxjdex = max(jdexChar, tempjdexChar);
+    int minindex = min(indexChar, tempindexChar);
+    int maxindex = max(indexChar, tempindexChar);
+    for (int i = minjdex; i <= maxjdex; i += 8) {
+        if (checklineX(box, minindex, minjdex, i)
+            && checklineY(box, minindex, i, maxindex)
+            && checklineX(box, maxindex, i, maxjdex)) {
+            return i;
+        }
+    }
+    return -1;
+}
+int checkRectY(char** box, int index, int jdex, int tempindex, int tempjdex) {
+    int jdexChar = jdex;
+    int indexChar = index;
+    int tempindexChar = tempindex;
+    int tempjdexChar = tempjdex;
+    int minjdex = min(jdexChar, tempjdexChar);
+    int maxjdex = max(jdexChar, tempjdexChar);
+    int minindex = min(indexChar, tempindexChar);
+    int maxindex = max(indexChar, tempindexChar);
+    for (int i = minindex; i <= maxindex; i+=4) {
+        if (checklineY(box, minindex, minjdex, i)
+            && checklineX(box, i, minjdex, maxjdex)
+            && checklineY(box, maxindex, maxjdex, i)) {
+            return i;
+        }
+    }
+    return -1;
+}
+//================= Hàm kiểm tra U Matching ================
+int checkMoreLineX(char** box, int index, int jdex, int tempindex, int tempjdex, int type, int col) {
+    int minindex = min(index, tempindex);
+    int maxindex = max(index, tempindex);
+    int minjdex = min(jdex, tempjdex);
+    int maxjdex = max(jdex, tempjdex);
+    // find line and y begin
+    int y = col + 8;
+    if (type == -8) {
+        y = -7;
+    }
+    // check more
+    if (checklineX(box, index, jdex, y)) {
+        if (checklineX(box, tempindex, tempjdex, y)) {
+            return y;
+        }
+    }
+    return -1;
+}
+int checkMoreLineY(char** box, int index, int jdex, int tempindex, int tempjdex, int type, int row) {
+    int minindex = min(index, tempindex);
+    int maxindex = max(index, tempindex);
+    int minjdex = min(jdex, tempjdex);
+    int maxjdex = max(jdex, tempjdex);
+    // find line and y begin
+    int x = row + 4;
+    int rowMin = minindex;
+    int rowMax = maxindex;
+    if (type == -4) {
+        x = -3;
+    }
+    // check more
+    if (checklineY(box, index, jdex, x)) {
+        if (checklineY(box, tempindex, tempjdex, x)) {
+            return x;
+        }
+    }
+    return -1;
+}
+//============ Hàm check ô trùng nhau ====================
+void sameBox(char** box, int index, int jdex, int tempindex, int tempjdex, int &check, int col, int row) {
+    //Check line with x
+    if (index == tempindex) {
+        if (checklineX(box, index, jdex, tempjdex)) {
+            check = 0;
+            deleteBox(box, index, jdex);
+            deleteBox(box, tempindex, tempjdex);
+            undrawBox(box, index, jdex);
+            return;
+        }
+    }
+    //Check line with y
+    if (jdex == tempjdex) {
+        if (checklineY(box, index, jdex, tempindex)) {
+            check = 0;
+            deleteBox(box, index, jdex);
+            deleteBox(box, tempindex, tempjdex);
+            undrawBox(box, index, jdex);
+            return;
+        }
+    }
+
+    int t = -1;
+
+    //Check in rectangle with x
+    if (t = checkRectX(box, index, jdex, tempindex, tempjdex) != -1) {
+        check = 0;
+        deleteBox(box, index, jdex);
+        deleteBox(box, tempindex, tempjdex);
+        undrawBox(box, index, jdex);
+        return;
+    }
+
+    //Check in rectangle with y
+    if (t = checkRectY(box, index, jdex, tempindex, tempjdex) != -1) {
+        check = 0;
+        deleteBox(box, index, jdex);
+        deleteBox(box, tempindex, tempjdex);
+        undrawBox(box, index, jdex);
+        return;
+    }
+
+    //Check more right
+    if (t = checkMoreLineX(box, index, jdex, tempindex, tempjdex, 8, col - 8) != -1) {
+        check = 0;
+        deleteBox(box, index, jdex);
+        deleteBox(box, tempindex, tempjdex);
+        undrawBox(box, index, jdex);
+        return;
+    }
+    
+    //Check more left
+    if (t = checkMoreLineX(box, index, jdex, tempindex, tempjdex, -8, col - 8) != -1) {
+        check = 0;
+        deleteBox(box, index, jdex);
+        deleteBox(box, tempindex, tempjdex);
+        undrawBox(box, index, jdex);
+        return;
+    }
+
+    //Check more down
+    if (t = checkMoreLineY(box, index, jdex, tempindex, tempjdex, 4, row - 4) != -1) {
+        check = 0;
+        deleteBox(box, index, jdex);
+        deleteBox(box, tempindex, tempjdex);
+        undrawBox(box, index, jdex);
+        return;
+    }
+
+    //Check more up
+    if (t = checkMoreLineY(box, index, jdex, tempindex, tempjdex, -4, row - 4) != -1) {
+        check = 0;
+        deleteBox(box, index, jdex);
+        deleteBox(box, tempindex, tempjdex);
+        undrawBox(box, index, jdex);
+        return;
+    }
+    undrawBox(box, tempindex, tempjdex);
+    undrawBox(box, index, jdex);
+    check = 0;
+}
 //========Hàm di chuyển ô trắng sang vị trí khác trong hộp=======
 void movingBox(char**& box, int index, int jdex, int row, int col, int x, int y) {
     int check = 0;
     char checkChar = ' ';
-    int tempindex;
-    int tempjdex;
+    int tempindex = 0;
+    int tempjdex = 0;
     while (true)
     {
         if (_kbhit()) {
@@ -116,19 +422,23 @@ void movingBox(char**& box, int index, int jdex, int row, int col, int x, int y)
             switch (key) {
             case 13:
                 if (check == 1) {
-                    if (checkChar == box[index + 1][jdex + 3]) {
-                        deleteBox(box, index, jdex);
-                        deleteBox(box, tempindex, tempjdex);
-                        undrawBox(box, index, jdex);
+                    if ((checkChar == box[index + 1][jdex + 3]) 
+                        && (!((tempindex == index) && (tempjdex == jdex)))) {
+                        sameBox(box, index, jdex, tempindex, tempjdex, check, col, row);
                     }
-                    check = 0;
-                    undrawBox(box, tempindex, tempjdex);
+                    else {
+                        undrawBox(box, tempindex, tempjdex);
+                        undrawBox(box, index, jdex);
+                        check = 0;
+                    }
                 }
-                check = 1;
-                tempindex = index;
-                tempjdex = jdex;
-                checkChar = box[tempindex + 1][tempjdex + 3];
-                break;
+                else {
+                    check = 1;
+                    tempindex = index;
+                    tempjdex = jdex;
+                    checkChar = box[tempindex + 1][tempjdex + 3];
+                    break;
+                }
             case 'w':
                 undrawBox(box, index, jdex);
                 index -= 4;
@@ -180,275 +490,57 @@ void movingBox(char**& box, int index, int jdex, int row, int col, int x, int y)
         }
     }
 }
-void loadingScreen() {
-    maxsc();
-    system("COLOR 0e");
-    system("cls");
-    SetConsoleCP(437);
-    SetConsoleOutputCP(437);
-    int bar1 = 177;
-    int bar2 = 219;
-    int x = 40;
-    int y = 0;
-    //=================== LOGO 23CLC08 =================
-    gotoXY(x, y++);
-    cout << "  _______  ________  ________  ___       ________  ________  ________     ";
-    gotoXY(x, y++);
-    cout << " /  ___  \\|\\_____  \\|\\   ____\\|\\  \\     |\\   ____\\|\\   __  \\|\\   __  \\    ";
-    gotoXY(x, y++);
-    cout << "/__/|_/  /\\|____|\\ /\\ \\  \\___|\\ \\  \\    \\ \\  \\___|\\ \\  \\|\\  \\ \\  \\|\\  \\   ";
-    gotoXY(x, y++);
-    cout << "|__|//  / /     \\|\\  \\ \\  \\    \\ \\  \\    \\ \\  \\    \\ \\  \\\\\\  \\ \\   __  \\  ";
-    gotoXY(x, y++);
-    cout << "    /  /_/__   __\\_\\  \\ \\  \\____\\ \\  \\____\\ \\  \\____\\ \\  \\\\\\  \\ \\  \\|\\  \\ ";
-    gotoXY(x, y++);
-    cout << "   |\\________\\|\\_______\\ \\_______\\ \\_______\\ \\_______\\ \\_______\\ \\_______\\";
-    gotoXY(x, y++);
-    cout << "    \\|_______|\\|_______|\\|_______|\\|_______|\\|_______|\\|_______|\\|_______|";
-    //================== THANH LOADING ========================
-    x += 15;
-    y += 5;
-    gotoXY(x, y++);
-    cout << ".-.    .----.   .--.  .----. .-..-. .-. .---. ";
-    gotoXY(x, y++);
-    cout << "| |   /  {}  \\ / {} \\ | {}  \\| ||  `| |/   __}";
-    gotoXY(x, y++);
-    cout << "| `--.\\      //  /\\  \\|     /| || |\\  |\\  {_ }";
-    gotoXY(x, y++);
-    cout << "`----' `----' `-'  `-'`----' `-'`-' `-' `---' ";
-    gotoXY(0, ++y);
-    for (int i = 0; i < 156; i++)
-        cout << (char)bar1;
-    cout << "\r";
-    cout << "\t\t\t\t";
-    gotoXY(0, y);
-    for (int i = 0; i < 156; i++) {
-        cout << (char)bar2;
-        Sleep(20);
-    }
-    system("cls");
-}
-void introGame() {
-    int x = 30;
-    int y = 0;
-    //============= The Begining Line ============
-    SetColor(6);
-    gotoXY(x, y++);
-    cout << "  _____ _   _ _____   __  __    _  _____ ____ _   _ ___ _   _  ____    ____    _    __  __ _____ ";
-    gotoXY(x, y++);
-    cout << " |_   _| | | | ____| |  \\/  |  / \\|_   _/ ___| | | |_ _| \\ | |/ ___|  / ___|  / \\  |  \\/  | ____|";
-    gotoXY(x, y++);
-    cout << "   | | | |_| |  _|   | |\\/| | / _ \\ | || |   | |_| || ||  \\| | |  _  | |  _  / _ \\ | |\\/| |  _|  ";
-    gotoXY(x, y++);
-    cout << "   | | |  _  | |___  | |  | |/ ___ \\| || |___|  _  || || |\\  | |_| | | |_| |/ ___ \\| |  | | |___ ";
-    gotoXY(x, y++);
-    cout << "   |_| |_| |_|_____| |_|  |_/_/   \\_\\_| \\____|_| |_|___|_| \\_|\\____|  \\____/_/   \\_\\_|  |_|_____|";
-    //============= Drawing Pokemon =============
-    gotoXY(x += 15, y++);
-    gotoXY(x, y++);
-    cout << "                                  ,',\n";
-    gotoXY(x, y++);
-    cout << "    _.----.        ____         ,'  _\\   ___    ___     ____\n";
-    gotoXY(x, y++);
-    cout << "_,-'       `.     |    |  /`.   \\,-'    |   \\  /   |   |    \\  |`.\n";
-    gotoXY(x, y++);
-    cout << "\\      __    \\    '-.  | /   `.  ___    |    \\/    |   '-.   \\ |  |\n";
-    gotoXY(x, y++);
-    cout << " \\.    \\ \\   |  __  |  |/    ,','_  `.  |          | __  |    \\|  |\n";
-    gotoXY(x, y++);
-    cout << "   \\    \\/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |\n";
-    gotoXY(x, y++);
-    cout << "    \\     ,-'/  /   \\    ,'   | \\/ / ,`.|         /  /   \\  |     |\n";
-    gotoXY(x, y++);
-    cout << "     \\    \\ |   \\_/  |   `-.  \\    `'  /|  |    ||   \\_/  | |\\    |\n";
-    gotoXY(x, y++);
-    cout << "      \\    \\ \\      /       `-.`.___,-' |  |\\  /| \\      /  | |   |\n";
-    gotoXY(x, y++);
-    cout << "       \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |\n";
-    gotoXY(x, y++);
-    cout << "        \\_.-'       |__|    `-._ |              '-.|     '-.| |   |\n";
-    gotoXY(x, y++);
-    cout << "                                `'                            '-._|\n";
-
-    int x_new = 70;
-    int y_new = 20;
-
-    //============= The Selection Box 1 =============
-    gotoXY(x_new, y_new);
-    putchar(218);
-    for (int i = 0; i < 10; i++)
-        putchar(196);
-    putchar(191);
-
-    int i = 0;
-    for (; i < 2; i++)
+//=================== Hàm yêu cầu nhập số dòng và số cột ========================
+void inputRowCol(int& row, int& col) {
+    drawingTitle();
+    char c = 205;
+    SetColor(7);
+    for (int i = 50; i <= 100; i++)
     {
-        gotoXY(x_new, y_new + i + 1);
-        putchar(179);
-        gotoXY(x_new + 2, y_new + i + 1);
-        cout << "New Game";
-        gotoXY(x_new + 10 + 1, y_new + i + 1);
-        putchar(179);
+        gotoXY(i, 20); cout << c;
+        gotoXY(i, 31); cout << c;
     }
-
-    gotoXY(x_new, y_new + i);
-    putchar(192);
-    for (i = 0; i < 10; i++)
-        putchar(196);
-    putchar(217);
-
-    int x1 = x_new - 2;
-    int y1 = y_new + 1;
-    gotoXY(x1, y1);
-    cout << "->";
-    y_new += 4;
-
-    //============= The Selection Box 2 ==============
-    gotoXY(x_new, y_new);
-    putchar(218);
-    for (int i = 0; i < 10; i++)
-        putchar(196);
-    putchar(191);
-
-    i = 0;
-    for (; i < 2; i++)
+    gotoXY(52, 22);
+    cout << "Number of columns: ";
+    int x_col = whereX();
+    int y_col = whereY();
+    gotoXY(52, 24);
+    cout << "Number of rows: ";
+    int x_row = whereX();
+    int y_row = whereY();
+    /*gotoXY(52, 26);
+    cout << "Column: ";
+    int x_col = whereX();
+    int y_col = whereY();
+    gotoXY(52, 28);
+    cout << "Row: ";
+    int x_row = whereX();
+    int y_row = whereY();
+    */
+    /*for (int x = 101; x <= 118; x++)
     {
-        gotoXY(x_new, y_new + i + 1);
-        putchar(179);
-        gotoXY(x_new + 3, y_new + i + 1);
-        cout << "Option";
-        gotoXY(x_new + 10 + 1, y_new + i + 1);
-        putchar(179);
-    }
-
-    gotoXY(x_new, y_new + i);
-    putchar(192);
-    for (i = 0; i < 10; i++)
-        putchar(196);
-    putchar(217);
-
-    int x2 = x_new - 2;
-    int y2 = y_new + 1;
-
-    y_new += 4;
-
-    //============= The Selection Box 3 ==============
-    gotoXY(x_new, y_new);
-    putchar(218);
-    for (int i = 0; i < 10; i++)
-        putchar(196);
-    putchar(191);
-
-    i = 0;
-    for (; i < 2; i++)
+        gotoXY(x, 1); cout << c;
+        gotoXY(x, 27); cout << c;
+    }*/
+    c = 186;
+    for (int j = 21; j <= 30; j++)
     {
-        gotoXY(x_new, y_new + i + 1);
-        putchar(179);
-        gotoXY(x_new + 4, y_new + i + 1);
-        cout << "Exit";
-        gotoXY(x_new + 10 + 1, y_new + i + 1);
-        putchar(179);
+        gotoXY(50, j); cout << c;
     }
-
-    gotoXY(x_new, y_new + i);
-    putchar(192);
-    for (i = 0; i < 10; i++)
-        putchar(196);
-    putchar(217);
-    int x3 = x_new - 2;
-    int y3 = y_new + 1;
-    int choose = 0;
-    int k = 0;
-    int x_phao = 68;
-    char c;
-    //================== Hàm này trả về giá trị của từng ô giá trị trong bảng menu
-    gotoXY(x1, y1);
-    while (true)
+    for (int j = 21; j <= 30; j++)
     {
-        if (_kbhit() == true)
-        {
-            c = _getch();
-            if (c == 'w') {
-                int x_check = whereX();
-                int y_check = whereY();
-                if (x_check == (x1) && y_check == (y1)) {
-                    continue;
-                }
-                else if (x_check == (x2) && y_check == (y2)) {
-                    cout << "  ";
-                    gotoXY(x1, y1);
-                    cout << "->";
-                    gotoXY(x1, y1);
-                }
-                else if (x_check == (x3) && y_check == (y3)) {
-                    cout << "  ";
-                    gotoXY(x2, y2);;
-                    cout << "->";
-                    gotoXY(x2, y2);
-                }
-            }
-            else if (c == 's') {
-                int x_check = whereX();
-                int y_check = whereY();
-                if (x_check == (x3) && y_check == (y3)) {
-                    continue;
-                }
-                else if (x_check == (x1) && y_check == (y1)) {
-                    cout << "  ";
-                    gotoXY(x2, y2);
-                    cout << "->";
-                    gotoXY(x2, y2);
-                }
-                else if (x_check == (x2) && y_check == (y2)) {
-                    cout << "  ";
-                    gotoXY(x3, y3);;
-                    cout << "->";
-                    gotoXY(x3, y3);
-                }
-            }
-            else if (c == 13) {
-                int x_check = whereX();
-                int y_check = whereY();
-                //====== Hàm if dùng check ô mà con trỏ hướng tới
-                if (x_check == x1 && y_check == y1) {
-                    choose = 1;
-                }
-                else if (x_check == x2 && y_check == y2) {
-                    choose = 2;
-                }
-                else if (x_check == x3 && y_check == y3) {
-                    choose = 3;
-                }
-                //======= Hàm if trả về giá trị mà con trỏ hướng tới
-                if (choose == 1) {
-                    system("cls");
-                    runningGame();
-                    break;
-                }
-                else if (choose == 2) {
-                    system("cls");
-                    break;
-                }
-                else if (choose == 3)
-                {
-                    system("cls");
-                    Sleep(8000);
-                    break;
-                }
-            }
-        }
+        gotoXY(100, j); cout << c;
     }
+    gotoXY(x_col, y_col);
+    cin >> col;
+    gotoXY(x_row, y_row);
+    cin >> row;
 }
 //=================== Hàm chạy game ================
-void runningGame() {
+void runningGame(int &row, int &col) {
     int index = 1;
     int jdex = 1;
-    int col, row;
     int x, y;
-    do {
-        cout << "Input column: "; cin >> col;
-        cout << "Input row: "; cin >> row;
-    } while ((col * row) % 2 != 0);
     row = 4 * row + 1;
     col = 8 * col + 1;
     playingBox(box, col, row);
