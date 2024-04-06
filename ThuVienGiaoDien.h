@@ -1,6 +1,7 @@
-﻿#pragma once
+#pragma once
 #include "ThuVien.h"
-#include "ThuVienTuCode.h"
+#include "ThuVienGameThamKhao.h"
+
 struct Player {
     string name;
     string password;
@@ -21,7 +22,7 @@ void addPlayerInfor(Player p, highScore*& infor);
 void signUp(Player& p);
 void checkPlayerInfor(Player p, highScore*& infor);
 void signIn(Player& p);
-
+void gameMode(Player& p);
 //================== Ham ve loading game ================
 void loadingScreen() {
     maxsc();
@@ -66,7 +67,7 @@ void loadingScreen() {
     gotoXY(0, y);
     for (int i = 0; i < 156; i++) {
         cout << (char)bar2;
-        Sleep(20);
+        Sleep(10);
     }
     system("cls");
 }
@@ -173,6 +174,7 @@ void introGame(Player& p) {
         {
             c = _getch();
             if (c == 'w') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 if (x_check == (x1) && y_check == (y1)) {
@@ -192,6 +194,7 @@ void introGame(Player& p) {
                 }
             }
             else if (c == 's') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 if (x_check == (x3) && y_check == (y3)) {
@@ -211,6 +214,7 @@ void introGame(Player& p) {
                 }
             }
             else if (c == 13) {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 //====== Hàm if dùng check ô mà con trỏ hướng tới
@@ -355,6 +359,7 @@ void loginGame(Player& p) {
         {
             c = _getch();
             if (c == 'w') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 if (x_check == (x1) && y_check == (y1)) {
@@ -374,6 +379,7 @@ void loginGame(Player& p) {
                 }
             }
             else if (c == 's') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 if (x_check == (x3) && y_check == (y3)) {
@@ -393,6 +399,7 @@ void loginGame(Player& p) {
                 }
             }
             else if (c == 13) {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 //====== Hàm if dùng check ô mà con trỏ hướng tới
@@ -558,6 +565,7 @@ void signUp(Player& p) {
         {
             c = _getch();
             if (c == 'a') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 if (x_check == (xsignUp) && y_check == (ysignUp)) {
@@ -571,6 +579,7 @@ void signUp(Player& p) {
                 }
             }
             else if (c == 'd') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 if (x_check == (xBack) && y_check == (yBack)) {
@@ -584,6 +593,7 @@ void signUp(Player& p) {
                 }
             }
             else if (c == 13) {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 //====== Hàm if dùng check ô mà con trỏ hướng tới
@@ -599,21 +609,16 @@ void signUp(Player& p) {
                     highScore* list = NULL;
                     addPlayerInfor(p, list);
                     system("cls");
-                    inputRowCol(row, col);
-                    system("cls");
-                    runningGame(row, col);
+                    gameMode(p);
+                    //inputRowCol(row, col);
+                    //system("cls");
+                    //runningGame(row, col);
                     break;
                 }
                 else if (choose == 2) {
                     system("cls");
                     Sleep(20);
                     loginGame(p);
-                    break;
-                }
-                else if (choose == 3)
-                {
-                    system("cls");
-                    introGame(p);
                     break;
                 }
             }
@@ -623,6 +628,7 @@ void signUp(Player& p) {
 
 //=================== Ham kiem tra thong tin nguoi choi =========
 void checkPlayerInfor(Player p, highScore*& infor) {
+    drawingTitle();
     int row = 0;
     int col = 0;
     ifstream readFile("Player_infor.txt");
@@ -644,6 +650,7 @@ void checkPlayerInfor(Player p, highScore*& infor) {
         readFile.close();
         if (check == 1) {
             system("cls");
+            Sleep(100);
             gotoXY(x_new, y_new);
             putchar(218);
             for (int i = 0; i < 10; i++)
@@ -666,10 +673,12 @@ void checkPlayerInfor(Player p, highScore*& infor) {
             for (i = 0; i < 10; i++)
                 putchar(196);
             putchar(217);
+            Sleep(1000);
             system("cls");
-            inputRowCol(row, col);
-            system("cls");
-            runningGame(row, col);
+            //inputRowCol(row, col);
+            gameMode(p);
+            //system("cls");
+            //runningGame(row, col);
         }
         else {
             system("cls");
@@ -695,10 +704,10 @@ void checkPlayerInfor(Player p, highScore*& infor) {
             for (i = 0; i < 10; i++)
                 putchar(196);
             putchar(217);
+            Sleep(1000);
             system("cls");
             Sleep(20);
             loginGame(p);
-
         }
         Sleep(8000);
     }
@@ -810,6 +819,7 @@ void signIn(Player& p) {
         {
             c = _getch();
             if (c == 'a') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 if (x_check == (xsignUp) && y_check == (ysignUp)) {
@@ -823,6 +833,7 @@ void signIn(Player& p) {
                 }
             }
             else if (c == 'd') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 if (x_check == (xBack) && y_check == (yBack)) {
@@ -836,6 +847,7 @@ void signIn(Player& p) {
                 }
             }
             else if (c == 13) {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 int x_check = whereX();
                 int y_check = whereY();
                 //====== Hàm if dùng check ô mà con trỏ hướng tới
@@ -868,4 +880,183 @@ void signIn(Player& p) {
         }
     }
     system("cls");
+}
+
+//=========================== Game mode ====================================
+void gameMode(Player& p) {
+    drawingTitle();
+    int x_new = 70;
+    int y_new = 20;
+
+    //============= The Selection Box 1 =============
+    gotoXY(x_new, y_new);
+    putchar(218);
+    for (int i = 0; i < 10; i++)
+        putchar(196);
+    putchar(191);
+
+    int i = 0;
+    for (; i < 2; i++)
+    {
+        gotoXY(x_new, y_new + i + 1);
+        putchar(179);
+        gotoXY(x_new + 4, y_new + i + 1);
+        cout << "Easy";
+        gotoXY(x_new + 10 + 1, y_new + i + 1);
+        putchar(179);
+    }
+
+    gotoXY(x_new, y_new + i);
+    putchar(192);
+    for (i = 0; i < 10; i++)
+        putchar(196);
+    putchar(217);
+
+    int x1 = x_new - 2;
+    int y1 = y_new + 1;
+    gotoXY(x1, y1);
+    cout << "->";
+    y_new += 4;
+
+    //============= The Selection Box 2 ==============
+    gotoXY(x_new, y_new);
+    putchar(218);
+    for (int i = 0; i < 10; i++)
+        putchar(196);
+    putchar(191);
+
+    i = 0;
+    for (; i < 2; i++)
+    {
+        gotoXY(x_new, y_new + i + 1);
+        putchar(179);
+        gotoXY(x_new + 3, y_new + i + 1);
+        cout << "Medium";
+        gotoXY(x_new + 10 + 1, y_new + i + 1);
+        putchar(179);
+    }
+
+    gotoXY(x_new, y_new + i);
+    putchar(192);
+    for (i = 0; i < 10; i++)
+        putchar(196);
+    putchar(217);
+
+    int x2 = x_new - 2;
+    int y2 = y_new + 1;
+
+    y_new += 4;
+
+    //============= The Selection Box 3 ==============
+    gotoXY(x_new, y_new);
+    putchar(218);
+    for (int i = 0; i < 10; i++)
+        putchar(196);
+    putchar(191);
+
+    i = 0;
+    for (; i < 2; i++)
+    {
+        gotoXY(x_new, y_new + i + 1);
+        putchar(179);
+        gotoXY(x_new + 4, y_new + i + 1);
+        cout << "Hard";
+        gotoXY(x_new + 10 + 1, y_new + i + 1);
+        putchar(179);
+    }
+
+    gotoXY(x_new, y_new + i);
+    putchar(192);
+    for (i = 0; i < 10; i++)
+        putchar(196);
+    putchar(217);
+    int x3 = x_new - 2;
+    int y3 = y_new + 1;
+    int choose = 0;
+    int k = 0;
+    int x_phao = 68;
+    char c;
+    gotoXY(x1, y1);
+    while (true)
+    {
+        if (_kbhit())
+        {
+            c = _getch();
+            if (c == 'w') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                int x_check = whereX();
+                int y_check = whereY();
+                if (x_check == (x1) && y_check == (y1)) {
+                    continue;
+                }
+                else if (x_check == (x2) && y_check == (y2)) {
+                    cout << "  ";
+                    gotoXY(x1, y1);
+                    cout << "->";
+                    gotoXY(x1, y1);
+                }
+                else if (x_check == (x3) && y_check == (y3)) {
+                    cout << "  ";
+                    gotoXY(x2, y2);;
+                    cout << "->";
+                    gotoXY(x2, y2);
+                }
+            }
+            else if (c == 's') {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                int x_check = whereX();
+                int y_check = whereY();
+                if (x_check == (x3) && y_check == (y3)) {
+                    continue;
+                }
+                else if (x_check == (x1) && y_check == (y1)) {
+                    cout << "  ";
+                    gotoXY(x2, y2);
+                    cout << "->";
+                    gotoXY(x2, y2);
+                }
+                else if (x_check == (x2) && y_check == (y2)) {
+                    cout << "  ";
+                    gotoXY(x3, y3);;
+                    cout << "->";
+                    gotoXY(x3, y3);
+                }
+            }
+            else if (c == 13) {
+                PlaySound(TEXT("minecraft-click-cropped.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                int x_check = whereX();
+                int y_check = whereY();
+                //====== Hàm if dùng check ô mà con trỏ hướng tới
+                if (x_check == x1 && y_check == y1) {
+                    choose = 1;
+                }
+                else if (x_check == x2 && y_check == y2) {
+                    choose = 2;
+                }
+                else if (x_check == x3 && y_check == y3) {
+                    choose = 3;
+                }
+                //======= Hàm if trả về giá trị mà con trỏ hướng tới
+                if (choose == 1) {
+                    system("cls");
+                    Sleep(20);
+                    runningGame(6, 4);
+                    break;
+                }
+                else if (choose == 2) {
+                    system("cls");
+                    Sleep(20);
+                    runningGame(8, 5);
+                    break;
+                }
+                else if (choose == 3)
+                {
+                    system("cls");
+                    Sleep(20);
+                    runningGame(8, 8);
+                    break;
+                }
+            }
+        }
+    }
 }
