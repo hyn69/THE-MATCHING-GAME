@@ -1,7 +1,7 @@
 // LapTrinhGamePikachu.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 #include "ThuVien.h"
-#include "ThuVienTuCode.h"
+#include "ThuVienGameThamKhao.h"
 #include "ThuVienGiaoDien.h"
 #define _WIN32_WINNT 0x0501
 using namespace std;
@@ -14,8 +14,10 @@ void set_color(int color) {
 
 int main()
 {   
+    srand(time(NULL));
     Player p;
     loadingScreen();
+    PlaySound(TEXT("game-start-6104.wav"), NULL, SND_FILENAME | SND_ASYNC);
     introGame(p);
     /*maxsc();
     srand(time(NULL));
