@@ -1,7 +1,8 @@
-/*Source code này lấy từ https https://paste.ubuntu.com/p/tqr239C4df/ được làm ra bởi https://www.youtube.com/@thientamnguyen.94
+/*Source code này lấy từ https://paste.ubuntu.com/p/tqr239C4df/ được làm ra bởi https://www.youtube.com/@thientamnguyen.94
 	và từ video: https://www.youtube.com/watch?v=jdpBqzf-jNQ&list=PLimFJKGsbn1m_z8pjCh5TdjyM5s5NlxU_&index=1 (Phút thứ 4:27 đến phút 6:32)
 */
 #pragma once // tránh đụng độ thư viện khi gọi chồng file lên nhau
+#include <iostream>
 #include <cctype>
 #include <stdio.h>
 #include <conio.h>
@@ -9,15 +10,34 @@
 #include <Windows.h>
 #include <time.h>
 #include <stdlib.h>
+#include <cstring>
+#include <string>
+#include <fstream>
+#include <algorithm>
+#include <mmsystem.h> // Include header file
+#pragma comment(lib, "winmm.lib") // Link with Winmm.lib (if your compiler supports pragma comments)
+//=============Thư viện hỗ trợ tăng heap memory ================
+#include <stddef.h>
+#define SIZEOF_HEAP  0x200
+char _REL_sysheap[SIZEOF_HEAP];
+size_t _REL_sizeof_sysheap = SIZEOF_HEAP;
 
 #pragma comment(lib, "user32")
+
+#define BLACK 0
+#define AQUA 3
+#define RED 4
+#define WHITE 7
+#define GRAY 8
+#define GREEN 10
+#define YELLOW 14
 
 using namespace std;
 char alphabet[27] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 char** box = NULL;
 
 //======= lấy tọa độ x của con trỏ hiện tại =============
-#define KEY_NONE	-1
+#define KEY_NONE -1
 int whereX()
 {
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -56,6 +76,14 @@ void SetColor(WORD color)
 	wAttributes |= color;
 
 	SetConsoleTextAttribute(hConsoleOutput, wAttributes);
+}
+// Set console color
+void SetColorBox(int backgound_color, int text_color)
+{
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	int color_code = backgound_color * 16 + text_color;
+	SetConsoleTextAttribute(hStdout, color_code);
 }
 //============== làm ẩn trỏ chuột ===========
 void ShowCur(bool CursorVisibility)
